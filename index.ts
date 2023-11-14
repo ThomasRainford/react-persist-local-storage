@@ -1,1 +1,3 @@
-console.log("Hello via Bun!");
+import useLocalStorage from "./src/useLocalStorage";
+
+export default useLocalStorage;
