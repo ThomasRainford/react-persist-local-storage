@@ -10,5 +10,5 @@ Run example:
 
 ```bash
 cd ./examples
-bun run dev
+bun dev
 ```

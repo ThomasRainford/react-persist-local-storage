@@ -20,7 +20,6 @@ const useLocalStorage = <T>(
     const parsedInitialValue = parseInitialValue(initialValue);
     try {
       const item = localStorage.getItem(key);
-      console.log("item: ", item);
       return item ? JSON.parse(item) : parsedInitialValue || "";
     } catch (error) {
       console.error(error);
@@ -31,7 +30,6 @@ const useLocalStorage = <T>(
   // Effect to update local storage when value changes.
   useEffect(() => {
     try {
-      console.log("New value", storedValue);
       localStorage.setItem(key, JSON.stringify(storedValue));
     } catch (error) {
       console.error(error);
