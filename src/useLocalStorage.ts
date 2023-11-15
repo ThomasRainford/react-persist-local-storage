@@ -13,11 +13,14 @@ const useLocalStorage = <T>(
       : String(initialValue);
   }, []);
 
-  // State to store the local storage value
+  // State to store the local storage value.
+  // Sets the inital value to the current local storage value.
+  // Otherwise, set the inital value to 'parsedInitialValue'.
   const [storedValue, setStoredValue] = useState<string>(() => {
     const parsedInitialValue = parseInitialValue(initialValue);
     try {
-      const item = window.localStorage.getItem(key);
+      const item = localStorage.getItem(key);
+      console.log("item: ", item);
       return item ? JSON.parse(item) : parsedInitialValue || "";
     } catch (error) {
       console.error(error);
@@ -28,7 +31,8 @@ const useLocalStorage = <T>(
   // Effect to update local storage when value changes.
   useEffect(() => {
     try {
-      window.localStorage.setItem(key, JSON.stringify(storedValue));
+      console.log("New value", storedValue);
+      localStorage.setItem(key, JSON.stringify(storedValue));
     } catch (error) {
       console.error(error);
     }

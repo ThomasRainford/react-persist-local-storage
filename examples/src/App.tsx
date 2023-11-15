@@ -5,8 +5,9 @@ import useLocalStorage from "../../index";
 import "./App.css";
 
 const ComponentOne = () => {
-  const [value, setValue] = useLocalStorage("component.one.test", {
-    value: "test value",
+  const key = "component.one.test";
+  const [value, setValue] = useLocalStorage(key, {
+    value: "test value"
   });
 
   const isValidJson = (value: string) => {
@@ -24,7 +25,7 @@ const ComponentOne = () => {
       <p>Current local storage value displayed below input.</p>
       <input value={value} onChange={(e) => setValue(e.target.value)} />
       <p>{value}</p>
-      <h5>{isValidJson(value) ? "Found JSON" : "-"}</h5>
+      <h5>{isValidJson(value) ? "Found JSON" : ""}</h5>
     </div>
   );
 };
