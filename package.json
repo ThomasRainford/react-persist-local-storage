@@ -4,7 +4,10 @@
   "type": "module",
   "scripts": {
     "build": "bun build index.ts --outdir=build --minify",
-    "dev": "bun build ./src/index.tsx --outdir ./build --watch"
+    "dev": "bun build ./src/index.tsx --outdir ./build --watch",
+    "lint:check": "eslint ./src/*",
+    "format:check": "prettier --check ./src/*",
+    "format:write": "prettier --write ./src/*"
   },
   "peerDependencies": {
     "react": "^18.2.0",
@@ -14,9 +17,14 @@
   "devDependencies": {
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
-    "bun-types": "latest"
+    "@typescript-eslint/eslint-plugin": "^6.11.0",
+    "@typescript-eslint/parser": "^6.11.0",
+    "bun-types": "latest",
+    "prettier": "^3.1.0"
   },
   "dependencies": {
+    "eslint": "^8.53.0",
+    "eslint-plugin-react": "^7.33.2",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }
