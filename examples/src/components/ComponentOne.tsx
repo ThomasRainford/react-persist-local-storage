@@ -1,4 +1,4 @@
-import useLocalStorage from "../../../src/useLocalStorage";
+import useLocalStorage from "../../../index";
 import "./ComponentOne.css";
 
 const ComponentOne = () => {
@@ -26,10 +26,7 @@ const ComponentOne = () => {
       />
       {value ? <p>{value}</p> : <div style={{ padding: "20px" }}></div>}
       <h5>{isValidJson(value || "") ? "Found JSON" : ""}</h5>
-      <button
-        disabled={localStorage.getItem(key) === null}
-        onClick={() => deleteValue(key)}
-      >
+      <button disabled={!value} onClick={() => deleteValue(key)}>
         Delete "{key}"
       </button>
     </div>
