@@ -1,0 +1,27 @@
+name: CI
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  lint-and-format:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Bun
+        uses: oven-sh/setup-bun@v1
+        with:
+          bun-version: latests
+
+      - name: Install Dependencies
+        run: bun install
+
+      - name: Linting
+        run: bun run lint:check
+
+      - name: Formatting
+        run: bun run format:check
