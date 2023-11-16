@@ -2,8 +2,8 @@ import useLocalStorage from "../../../src/useLocalStorage";
 import "./ComponentOne.css";
 
 const ComponentOne = () => {
-  const key = "component.one.test";
-  const [value, setValue] = useLocalStorage(key, {
+  const key = "component.one.example";
+  const [value, setValue, deleteValue] = useLocalStorage(key, {
     value: "test value"
   });
 
@@ -17,12 +17,21 @@ const ComponentOne = () => {
   };
 
   return (
-    <div className="component-border">
+    <div className="component-border" style={{ paddingBottom: "15px" }}>
       <h3>Component One</h3>
       <p>Current local storage value displayed below input.</p>
-      <input value={value} onChange={(e) => setValue(e.target.value)} />
-      <p>{value}</p>
-      <h5>{isValidJson(value) ? "Found JSON" : ""}</h5>
+      <input
+        value={value || ""}
+        onChange={(e) => setValue(e.target.value)}
+      />
+      {value ? <p>{value}</p> : <div style={{ padding: "20px" }}></div>}
+      <h5>{isValidJson(value || "") ? "Found JSON" : ""}</h5>
+      <button
+        disabled={localStorage.getItem(key) === null}
+        onClick={() => deleteValue(key)}
+      >
+        Delete "{key}"
+      </button>
     </div>
   );
 };

@@ -1,3 +1,11 @@
 .component-border {
   border: 1px solid rgb(105, 105, 105);
 }
+
+button[disabled=disabled], button:disabled {
+  border: 1px solid #999999;
+  background-color: #575757;
+  color: #878787;
+  cursor: not-allowed;
+  pointer-events: none;
+}
