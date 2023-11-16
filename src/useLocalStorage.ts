@@ -12,7 +12,12 @@ type UseLocalStorageReturnValue = [
 ];
 
 /**
+ * A hook that persists state in local storage.
+ * Returns the state value and setter as well as a function
+ * to delete the local storage item.
  *
+ * When this hook is called, a new local storage item is created
+ * with the key 'key' and value 'initialValue'.
  *
  * @param key local storage key.
  * @param initialValue Initial value of local storage item.
