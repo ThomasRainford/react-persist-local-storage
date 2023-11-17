@@ -1,4 +1,4 @@
-import useLocalStorage from "../../../index";
+import useLocalStorage from "../../../build/index";
 import "./ComponentOne.css";
 
 const ComponentOne = () => {

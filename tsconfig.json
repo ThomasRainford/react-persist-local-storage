@@ -20,5 +20,6 @@
       "bun-types" // add Bun global
     ]
   },
-  "exclude": ["build", "examples"]
+  "include": ["./src/*.ts", "index.ts"],
+  "exclude": ["node_modules", "build", "examples"]
 }
