@@ -1,4 +1,4 @@
-# react-local-storage-persist
+# react-persist-local-storage
 
 A React hook for persisting and managing state in local storage.
 
