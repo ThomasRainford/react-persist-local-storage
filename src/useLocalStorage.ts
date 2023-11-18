@@ -1,7 +1,7 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 type LocalStorageValue = string | null;
 
@@ -48,23 +48,26 @@ const useLocalStorage = <T>(
     const parsedInitialValue = parseInitialValue(initialValue);
     try {
       const item = localStorage.getItem(key);
-      return item ? JSON.parse(item) : parsedInitialValue || "";
+      return item ? String(item) : parsedInitialValue || "";
     } catch (error) {
       console.error(error);
       return parsedInitialValue || "";
     }
   });
 
+  useEffect(() => {
+    localStorage.setItem(key, parseInitialValue(initialValue));
+  }, []);
+
   /**
-   * Sets the local storage value to 'value' and
-   * the state value to 'value'.
+   * Sets the state value to 'value'.
    *
    * @param value
    */
   const setValue = (value: string | null) => {
     try {
-      localStorage.setItem(key, JSON.stringify(value));
       setStoredValue(value);
+      localStorage.setItem(key, value || "");
     } catch (error) {
       console.error(error);
     }

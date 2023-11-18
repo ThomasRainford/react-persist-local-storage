@@ -10,7 +10,8 @@
   "scripts": {
     "build:bun": "tsc --emitDeclarationOnly && bun build ./index.ts --outdir=buildbun --minify",
     "build": "tsc # Use this before publishing. Bun bulid does not work.",
-    "dev": "bun build ./index.ts --outdir ./build --watch",
+    "dev:bun": "bun build ./index.ts --outdir ./build --watch",
+    "dev": "tsc --watch # Use this. Bun bulid does not work.",
     "lint:check": "eslint ./src/*",
     "format:check": "prettier --check ./src/*",
     "format:write": "prettier --write ./src/*",

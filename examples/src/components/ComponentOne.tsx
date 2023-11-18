@@ -24,8 +24,12 @@ const ComponentOne = () => {
         value={value || ""}
         onChange={(e) => setValue(e.target.value)}
       />
-      {value ? <p>{value}</p> : <div style={{ padding: "20px" }}></div>}
-      <h5>{isValidJson(value || "") ? "Found JSON" : ""}</h5>
+      {value ? <p>{value}</p> : <div style={{ padding: "20px" }} />}
+      {isValidJson(value || "") ? (
+        <h5>Found JSON</h5>
+      ) : (
+        <div style={{ padding: "24px" }} />
+      )}
       <button disabled={!value} onClick={() => deleteValue(key)}>
         Delete "{key}"
       </button>
