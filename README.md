@@ -4,6 +4,12 @@ A React hook for persisting and managing state in local storage.
 
 Supports object and string types.
 
+## Features
+
+- Keeps React state in sync with local storage.
+- Add, update and delete local storage items.
+- Static typing when using objects!
+
 ## Example Usage:
 
 ### Initial value as `object`:
@@ -70,21 +76,21 @@ export default Example;
 
 - [Bun](https://bun.sh/)
 
-To install dependencies:
+#### To install dependencies:
 
 ```bash
 bun install
 ```
 
-To build:
+#### To build:
 
-Note: The build uses `tsc` instead of `Bun` as `Bun` currenlty has a bug where React is bundled in the build which causes the `Invalid hook call` error. Once this has been fixed, `Bun` will be used
+Note: The build uses `tsc` instead of `bun` as `Bun` currenlty has a bug where React is bundled in the build which causes the `Invalid hook call` error. Once this has been fixed, `bun` will be used.
 
 ```bash
 bun run build
 ```
 
-Run example:
+#### Run example:
 
 ```bash
 cd ./examples
