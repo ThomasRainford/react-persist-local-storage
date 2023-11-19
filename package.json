@@ -1,12 +1,14 @@
 {
   "name": "react-persist-local-storage",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "license": "MIT",
   "main": "build/index.js",
   "types": "build/index.d.ts",
   "module": "index.ts",
   "type": "module",
-  "files": ["build, README.md"],
+  "files": [
+    "build, README.md"
+  ],
   "scripts": {
     "build:bun": "tsc --emitDeclarationOnly && bun build ./index.ts --outdir=buildbun --minify",
     "build": "tsc # Use this before publishing. Bun bulid does not work.",
@@ -35,7 +37,5 @@
     "react-dom": "^18.2.0",
     "typescript": "^5.x"
   },
-  "dependencies": {
-
-  }
+  "dependencies": {}
 }
