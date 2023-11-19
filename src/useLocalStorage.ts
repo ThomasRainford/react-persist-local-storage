@@ -2,12 +2,17 @@
 /// <reference lib="dom.iterable" />
 
 import { useCallback, useEffect, useState } from "react";
+import { isValidJson } from "./util";
 
-type LocalStorageValue = string | null;
+export type LocalStorageValue<T> = T extends null
+  ? null
+  : T extends object
+    ? T
+    : string;
 
-type UseLocalStorageReturnValue = [
-  LocalStorageValue,
-  (_: string) => void,
+type UseLocalStorageReturnValue<T> = [
+  LocalStorageValue<T>,
+  (_: LocalStorageValue<T>) => void,
   (_: string) => void
 ];
 
@@ -26,7 +31,7 @@ type UseLocalStorageReturnValue = [
 const useLocalStorage = <T>(
   key: string,
   initialValue: T | null
-): UseLocalStorageReturnValue => {
+): UseLocalStorageReturnValue<T> => {
   /**
    * Returns the string value of 'value'. If 'value'
    * is an object, then return a JSON string. Otherwise, return
@@ -35,7 +40,7 @@ const useLocalStorage = <T>(
    * @param value - The value to parse to a string.
    * @return A string value of 'value'.
    */
-  const parseInitialValue = useCallback(<T>(value: T): string => {
+  const parseValue = useCallback(<T>(value: T): string => {
     return typeof value === "object"
       ? JSON.stringify(value)
       : String(value);
@@ -44,19 +49,22 @@ const useLocalStorage = <T>(
   // State to store the local storage value.
   // Sets the inital value to the current local storage value.
   // Otherwise, set the inital value to 'parsedInitialValue'.
-  const [storedValue, setStoredValue] = useState<string | null>(() => {
-    const parsedInitialValue = parseInitialValue(initialValue);
-    try {
-      const item = localStorage.getItem(key);
-      return item ? String(item) : parsedInitialValue || "";
-    } catch (error) {
-      console.error(error);
-      return parsedInitialValue || "";
+  const [storedValue, setStoredValue] = useState<LocalStorageValue<T>>(
+    () => {
+      const parsedInitialValue = parseValue(initialValue);
+      try {
+        const item = localStorage.getItem(key);
+        const isJson = isValidJson(item || "");
+        return isJson ? JSON.parse(item || "") : item;
+      } catch (error) {
+        console.error(error);
+        return parsedInitialValue || "";
+      }
     }
-  });
+  );
 
   useEffect(() => {
-    localStorage.setItem(key, parseInitialValue(initialValue));
+    localStorage.setItem(key, parseValue(initialValue));
   }, []);
 
   /**
@@ -64,10 +72,11 @@ const useLocalStorage = <T>(
    *
    * @param value
    */
-  const setValue = (value: string | null) => {
+  const setValue = (value: LocalStorageValue<T>) => {
     try {
       setStoredValue(value);
-      localStorage.setItem(key, value || "");
+      let newValue = parseValue(value);
+      localStorage.setItem(key, newValue);
     } catch (error) {
       console.error(error);
     }
@@ -81,7 +90,7 @@ const useLocalStorage = <T>(
    */
   const deleteItem = useCallback((key: string) => {
     localStorage.removeItem(key);
-    setStoredValue(null);
+    setStoredValue(null as LocalStorageValue<T>);
   }, []);
 
   return [storedValue, setValue, deleteItem];
