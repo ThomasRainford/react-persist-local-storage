@@ -1,10 +1,10 @@
 {
   "name": "react-persist-local-storage",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "license": "MIT",
   "main": "build/index.js",
   "types": "build/index.d.ts",
-  "module": "index.ts",
+  "module": "build/index.js",
   "type": "module",
   "files": [
     "build",
