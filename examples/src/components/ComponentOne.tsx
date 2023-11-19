@@ -1,5 +1,6 @@
-import useLocalStorage from "../../../build/index";
-import { LocalStorageValue } from "../../../build/src/useLocalStorage";
+import useLocalStorage, {
+  LocalStorageValue
+} from "react-persist-local-storage";
 import "./ComponentOne.css";
 
 /**
