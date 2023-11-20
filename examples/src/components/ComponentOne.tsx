@@ -1,6 +1,4 @@
-import useLocalStorage, {
-  LocalStorageValue
-} from "react-persist-local-storage";
+import useLocalStorage, { LocalStorageValue } from "../../../build/index";
 import "./ComponentOne.css";
 
 /**
@@ -14,6 +12,7 @@ const ComponentOne = () => {
   });
 
   const parseValueAsString = (val: LocalStorageValue<typeof value>) => {
+    if (val === null) return "";
     if (typeof val === "object") return JSON.stringify(val);
     else return String(val);
   };
