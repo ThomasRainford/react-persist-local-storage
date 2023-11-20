@@ -1,7 +1,7 @@
 /// <reference lib="dom" />
 /// <reference lib="dom.iterable" />
 
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useState } from "react";
 import { isValidJson } from "./util";
 
 export type LocalStorageValue<T> = T extends null
@@ -54,6 +54,7 @@ const useLocalStorage = <T>(
       const parsedInitialValue = parseValue(initialValue);
       try {
         const item = localStorage.getItem(key);
+        if (!item) localStorage.setItem(key, parsedInitialValue);
         const isJson = isValidJson(item || "");
         return isJson ? JSON.parse(item || "") : item;
       } catch (error) {
@@ -62,10 +63,6 @@ const useLocalStorage = <T>(
       }
     }
   );
-
-  useEffect(() => {
-    localStorage.setItem(key, parseValue(initialValue));
-  }, []);
 
   /**
    * Sets the state value to 'value'.

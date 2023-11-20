@@ -82,12 +82,12 @@ export default Example;
 bun install
 ```
 
-#### To build:
+#### Build in watch mode:
 
 Note: The build uses `tsc` instead of `bun` as `Bun` currenlty has a bug where React is bundled in the build which causes the `Invalid hook call` error. Once this has been fixed, `bun` will be used.
 
 ```bash
-bun run build
+bun dev
 ```
 
 #### Run example:
