@@ -12,39 +12,10 @@ Supports object and string types.
 
 ## Example Usage:
 
-### Initial value as `object`:
-
-```tsx
-import useLocalStorage from "../../../index";
-
-const Example = () => {
-  const key = "example.value";
-  const [value, setValue, deleteValue] = useLocalStorage(key, {
-    value: "example value"
-  });
-
-  return (
-    <div>
-      <input
-        value={JSON.stringify(value) || ""}
-        onChange={(e) => setValue(JSON.parse(e.target.value))}
-      />
-      {/* 'value' is statically typed! */}
-      <p>{value.value}</p>
-      <button disabled={!value} onClick={() => deleteValue(key)}>
-        Delete "{key}"
-      </button>
-    </div>
-  );
-};
-
-export default Example;
-```
-
 ### Initial value as `string`:
 
 ```tsx
-import useLocalStorage from "../../../index";
+import useLocalStorage from "react-persist-local-storage";
 
 const Example = () => {
   const key = "example.value";
@@ -60,6 +31,44 @@ const Example = () => {
         onChange={(e) => setValue(e.target.value)}
       />
       <p>{value}</p>
+      <button disabled={!value} onClick={() => deleteValue(key)}>
+        Delete "{key}"
+      </button>
+    </div>
+  );
+};
+
+export default Example;
+```
+
+### Initial value as `object`:
+
+```tsx
+import useLocalStorage, {
+  LocalStorageValue
+} from "react-persist-local-storage";
+
+const Example = () => {
+  const key = "example.value";
+  const [value, setValue, deleteValue] = useLocalStorage(key, {
+    value: "example value"
+  });
+
+  return (
+    <div>
+      <input
+        value={JSON.stringify(value) || ""}
+        onChange={(e) =>
+          setValue(
+            JSON.parse(e.target.value) as LocalStorageValue<typeof value>
+          )
+        }
+      />
+      {/* 
+        'value' is statically typed! 
+        'value' is nullable as it can be removed from local storage.
+      */}
+      <p>{value?.value || ""}</p>
       <button disabled={!value} onClick={() => deleteValue(key)}>
         Delete "{key}"
       </button>
