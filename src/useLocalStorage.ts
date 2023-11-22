@@ -7,7 +7,7 @@ import { isValidJson } from "./util";
 export type LocalStorageValue<T> = T extends null
   ? null
   : T extends object
-    ? T
+    ? T | null
     : string;
 
 type UseLocalStorageReturnValue<T> = [
