@@ -27,7 +27,7 @@ const ComponentOne = () => {
         </p>
         {value ? <p>{value}</p> : <div style={{ margin: "56px" }} />}
       </div>
-      <button disabled={!value} onClick={() => deleteValue(key)}>
+      <button disabled={!value} onClick={() => deleteValue()}>
         Delete "{key}"
       </button>
     </div>

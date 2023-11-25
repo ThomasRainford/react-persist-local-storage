@@ -13,7 +13,7 @@ export type LocalStorageValue<T> = T extends null
 type UseLocalStorageReturnValue<T> = [
   LocalStorageValue<T>,
   (_: LocalStorageValue<T>) => void,
-  (_: string) => void
+  () => void
 ];
 
 /**

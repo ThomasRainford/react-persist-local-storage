@@ -44,7 +44,7 @@ const ComponentTwo = () => {
       ) : (
         <div style={{ padding: "20px" }} />
       )}
-      <button disabled={!value} onClick={() => deleteValue(key)}>
+      <button disabled={!value} onClick={() => deleteValue()}>
         Delete "{key}"
       </button>
     </div>
