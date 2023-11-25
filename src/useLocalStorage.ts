@@ -8,7 +8,7 @@ export type LocalStorageValue<T> = T extends null
   ? null
   : T extends object
     ? T | null
-    : string;
+    : string | null;
 
 type UseLocalStorageReturnValue<T> = [
   LocalStorageValue<T>,
@@ -22,11 +22,13 @@ type UseLocalStorageReturnValue<T> = [
  * to delete the local storage item.
  *
  * When this hook is called, a new local storage item is created
- * with the key 'key' and value 'initialValue'.
+ * with the key 'key' and value 'initialValue'. The setter function
+ * will set the state and local storage value to the given value. The
+ * delete function will remove the local storage item from local storage.
  *
- * @param key local storage key.
+ * @param key Local storage key.
  * @param initialValue Initial value of local storage item.
- * @returns State value a set state function.
+ * @returns State value, a set state function and a function to remove the local storage value.
  */
 const useLocalStorage = <T>(
   key: string,
@@ -67,7 +69,7 @@ const useLocalStorage = <T>(
   /**
    * Sets the state value to 'value'.
    *
-   * @param value
+   * @param value - The new local storage value.
    */
   const setValue = (value: LocalStorageValue<T>) => {
     try {
@@ -80,12 +82,10 @@ const useLocalStorage = <T>(
   };
 
   /**
-   * Deletes an item from local storage given by 'key'.
-   * Also, the state is set to null.
-   *
-   * @param key - The key of the local storage item to delete.
+   * Deletes the item from local storage.
+   * Also, the state value is set to null.
    */
-  const deleteItem = useCallback((key: string) => {
+  const deleteItem = useCallback(() => {
     localStorage.removeItem(key);
     setStoredValue(null as LocalStorageValue<T>);
   }, []);
