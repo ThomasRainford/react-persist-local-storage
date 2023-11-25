@@ -69,7 +69,7 @@ const useLocalStorage = <T>(
   /**
    * Sets the state value to 'value'.
    *
-   * @param value - The new local storage value.
+   * @param value The new local storage value.
    */
   const setValue = (value: LocalStorageValue<T>) => {
     try {
