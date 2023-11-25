@@ -25,9 +25,8 @@ const ComponentOne = () => {
         <p>
           <b>Current local storage value:</b>
         </p>
-        <p>{value}</p>
+        {value ? <p>{value}</p> : <div style={{ margin: "56px" }} />}
       </div>
-
       <button disabled={!value} onClick={() => deleteValue(key)}>
         Delete "{key}"
       </button>
