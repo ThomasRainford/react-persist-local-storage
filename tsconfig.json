@@ -19,7 +19,10 @@
     "outDir": "build",
     "types": [
       "bun-types" // add Bun global
-    ]
+    ],
+    "paths": {
+      "test": ["./tests/*.test.ts"]
+    }
   },
   "include": ["./src/*.ts", "index.ts"],
   "exclude": ["node_modules", "build", "examples"]

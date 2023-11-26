@@ -55,8 +55,9 @@ const useLocalStorage = <T>(
     () => {
       const parsedInitialValue = parseValue(initialValue);
       try {
-        const item = localStorage.getItem(key);
+        let item = localStorage.getItem(key);
         if (!item) localStorage.setItem(key, parsedInitialValue);
+        item = localStorage.getItem(key);
         const isJson = isValidJson(item || "");
         return isJson ? JSON.parse(item || "") : item;
       } catch (error) {
