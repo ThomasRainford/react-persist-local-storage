@@ -30,7 +30,6 @@
   "devDependencies": {
     "@happy-dom/global-registrator": "^12.10.3",
     "@testing-library/react": "^14.1.2",
-    "@testing-library/react-hooks": "^8.0.1",
     "@types/react": "^18.2.37",
     "@types/react-dom": "^18.2.15",
     "@typescript-eslint/eslint-plugin": "^6.11.0",
