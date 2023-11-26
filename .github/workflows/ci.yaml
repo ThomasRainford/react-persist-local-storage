@@ -5,7 +5,7 @@ on:
     branches: ["main"]
 
 jobs:
-  lint-and-format:
+  ci:
     runs-on: ubuntu-latest
 
     steps:
@@ -25,3 +25,6 @@ jobs:
 
       - name: Formatting
         run: bun run format:check
+
+      - name: Unit tests
+        run: bun test
