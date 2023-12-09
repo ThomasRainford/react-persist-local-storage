@@ -109,6 +109,7 @@ const useLocalStorage = <T>(
       } else {
         newValue = event.newValue as LocalStorageValue<T>;
       }
+      //console.log(newValue, event.key);
       setValue(newValue, event.key as string);
     };
     window.addEventListener("storage", onStorageChange);

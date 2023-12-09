@@ -83,4 +83,66 @@ describe("useLocalStorage tests", () => {
 
     expect(localStorage.getItem(testKey)).toBeNull();
   });
+
+  test("Storage event syncs string values between hooks when sync enabled", () => {
+    const testKey = "test1.key";
+    const test1Value = "test1 value";
+    const { result: result1 } = renderHook(() =>
+      useLocalStorage(testKey, test1Value, { sync: true })
+    );
+    const test2Value = "test2 value";
+    const { result: result2 } = renderHook(() =>
+      useLocalStorage(testKey, test2Value, { sync: true })
+    );
+
+    const newTestValue = "new test value";
+
+    act(() => {
+      window.dispatchEvent(
+        new StorageEvent("storage", {
+          key: testKey,
+          newValue: newTestValue
+        })
+      );
+    });
+
+    expect(localStorage.getItem(testKey)).toBe(newTestValue);
+    expect(result1.current[0]).toBe(newTestValue);
+
+    expect(localStorage.getItem(testKey)).toBe(newTestValue);
+    expect(result2.current[0]).toBe(newTestValue);
+  });
+
+  test("Storage event syncs JSON values between hooks when sync enabled", () => {
+    const testKey = "test1.key";
+    const test1Value = { value: "test1 value" };
+    const { result: result1 } = renderHook(() =>
+      useLocalStorage(testKey, test1Value, { sync: true })
+    );
+    const test2Value = { value: "test2 value" };
+    const { result: result2 } = renderHook(() =>
+      useLocalStorage(testKey, test2Value, { sync: true })
+    );
+
+    const newTestValue = { value: "new test value" };
+
+    act(() => {
+      window.dispatchEvent(
+        new StorageEvent("storage", {
+          key: testKey,
+          newValue: JSON.stringify(newTestValue)
+        })
+      );
+    });
+
+    expect(localStorage.getItem(testKey)).toBe(
+      JSON.stringify(newTestValue)
+    );
+    expect(result1.current[0]).toEqual(newTestValue);
+
+    expect(localStorage.getItem(testKey)).toBe(
+      JSON.stringify(newTestValue)
+    );
+    expect(result2.current[0]).toEqual(newTestValue);
+  });
 });
