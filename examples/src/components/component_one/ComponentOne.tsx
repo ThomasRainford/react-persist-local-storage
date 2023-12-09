@@ -9,7 +9,8 @@ const ComponentOne = () => {
   const key = "component.one.example";
   const [value, setValue, deleteValue] = useLocalStorage(
     key,
-    "Test Value"
+    "Test Value",
+    { sync: true }
   );
 
   return (

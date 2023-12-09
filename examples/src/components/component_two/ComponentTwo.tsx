@@ -9,9 +9,13 @@ import "./ComponentTwo.css";
  */
 const ComponentTwo = () => {
   const key = "component.two.example";
-  const [value, setValue, deleteValue] = useLocalStorage(key, {
-    value: "test value"
-  });
+  const [value, setValue, deleteValue] = useLocalStorage(
+    key,
+    {
+      value: "test value"
+    },
+    { sync: true }
+  );
 
   const parseValueAsString = (val: LocalStorageValue<typeof value>) => {
     return JSON.stringify(val);
