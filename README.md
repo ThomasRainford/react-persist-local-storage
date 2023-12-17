@@ -1,6 +1,6 @@
 # react-persist-local-storage
 
-A React hook for persisting and managing state in local storage.
+A React hook for persisting, syncing and managing state in local storage.
 
 Supports object and string types.
 
@@ -9,23 +9,7 @@ Supports object and string types.
 - Keeps React state in sync with local storage.
 - Keeps local storage in sync between windows.
 - Add, update and delete local storage items.
-- Static typing when using objects!
-
-## Reference
-
-### `useLocalStorage(key, initialValue, options)`
-
-#### Parameters
-
-- `key`: The local storage key.
-- `initialValue`: Initial value of the localstorage value.
-- `options.sync`: Enable local storage syncing between windows.
-
-#### Returns
-
-1. The serialized local storage value.
-2. Function for setting the local storage value.
-3. Function for removing the local storage item.
+- Type hinting when using objects!
 
 ## Example Usage:
 
@@ -82,7 +66,7 @@ const Example = () => {
         }
       />
       {/* 
-        'value' is statically typed! 
+        'value' is typed! 
         'value' is nullable as it can be removed from local storage.
       */}
       <p>{value?.value || ""}</p>
@@ -95,6 +79,24 @@ const Example = () => {
 
 export default Example;
 ```
+
+## Reference
+
+### `useLocalStorage(key, initialValue, options)`
+
+#### Parameters
+
+- `key`: The local storage key.
+- `initialValue`: Initial value of the localstorage value.
+- `options.sync`: Enable local storage syncing between windows.
+
+#### Returns
+
+##### `[value, setValue, deleteItem]`
+
+1. The serialized local storage value.
+2. Function for setting the local storage value.
+3. Function for removing the local storage item.
 
 ## Development
 
