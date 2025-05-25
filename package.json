@@ -20,7 +20,8 @@
     "lint:check": "eslint ./src/*",
     "format:check": "prettier --check ./src/*",
     "format:write": "prettier --write ./src/*",
-    "test": "jest --watch",
+    "test": "jest",
+    "test:watch": "jest --watch",
     "prepare": "is-ci || husky install"
   },
   "peerDependencies": {
