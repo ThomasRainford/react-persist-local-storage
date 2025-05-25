@@ -7,24 +7,30 @@ on:
 jobs:
   ci:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        react-version: ["18", "19"]
 
+    name: Test with React ${{ matrix.react-version }}
     steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 
       - name: Set up Bun
-        uses: oven-sh/setup-bun@v1
+        uses: actions/setup-node@v4
         with:
-          bun-version: "1.0.11"
+          node-version: "latest"
 
       - name: Install Dependencies
-        run: bun install
+        run: |
+          npm install
+          npm install react@${{ matrix.react-version }} react-dom@${{ matrix.react-version }}
 
       - name: Linting
-        run: bun run lint:check
+        run: npm run lint:check
 
       - name: Formatting
-        run: bun run format:check
+        run: npm run format:check
 
       - name: Unit tests
-        run: bun test
+        run: npm test

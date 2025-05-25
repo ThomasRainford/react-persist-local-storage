@@ -1,7 +1,5 @@
-/// <reference lib="dom" />
-
+import { afterEach, describe, expect, test } from "@jest/globals";
 import { act, renderHook } from "@testing-library/react";
-import { afterEach, describe, expect, test } from "bun:test";
 import useLocalStorage from "../index";
 
 describe("useLocalStorage tests", () => {
