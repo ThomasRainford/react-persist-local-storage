@@ -1,6 +1,3 @@
-/// <reference lib="dom" />
-/// <reference lib="dom.iterable" />
-
 import { useCallback, useEffect, useState } from "react";
 import { isValidJson } from "./util";
 

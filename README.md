@@ -102,25 +102,23 @@ export default Example;
 
 ### Requirements
 
-- [Bun](https://bun.sh/)
+- [NodeJs](https://nodejs.org/)
 
 #### To install dependencies:
 
 ```bash
-bun install
+npm install
 ```
 
 #### Build in watch mode:
 
-Note: The build uses `tsc` instead of `bun` as `Bun` currenlty has a bug where React is bundled in the build which causes the `Invalid hook call` error. Once this has been fixed, `bun` will be used.
-
 ```bash
-bun dev
+npm run dev
 ```
 
 #### Run example:
 
 ```bash
 cd ./examples
-bun dev
+npm run dev
 ```

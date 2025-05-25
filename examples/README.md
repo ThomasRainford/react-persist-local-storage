@@ -1,3 +1,3 @@
-# `react-local-storage` examples
+# `react-persist-local-storage` examples
 
-Examples for the `react-local-storage` hook using React, TypeScript and Vite.
+Examples for the `react-persist-local-storage` hook using React, TypeScript and Vite.
