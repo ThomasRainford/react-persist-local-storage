@@ -72,6 +72,7 @@ const useLocalStorage = <T>(
    * Sets the state value to 'value'.
    *
    * @param value The new local storage value.
+   * @param eventKey The key of the event that triggered the change.
    */
   const setValue = (value: LocalStorageValue<T>, eventKey?: string) => {
     try {
