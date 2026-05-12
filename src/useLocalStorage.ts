@@ -155,10 +155,6 @@ const useLocalStorage = <T>(
   }, [key]);
 
   // Effect for managing storage sync.
-  // Dependencies are now fully declared so the handler is never stale:
-  // - options?.sync - re-registers the listener if the sync option changes.
-  // - setValueFromEvent - stable reference that already captures the current key.
-  // - deserialize - stable memoized helper.
   useEffect(() => {
     if (!isBrowser || !options?.sync) return;
 

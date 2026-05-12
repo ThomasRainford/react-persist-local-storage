@@ -1,6 +1,8 @@
 name: CI
 
 on:
+  push:
+    branches: ["main"]
   pull_request:
     branches: ["main"]
 
@@ -13,24 +15,29 @@ jobs:
 
     name: Test with React ${{ matrix.react-version }}
     steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v4
 
       - name: Set up Node
         uses: actions/setup-node@v4
         with:
-          node-version: "latest"
+          node-version: "22"
+          cache: "npm"
 
-      - name: Install Dependencies
-        run: |
-          npm install
-          npm install react@${{ matrix.react-version }} react-dom@${{ matrix.react-version }}
+      - name: Install dependencies
+        run: npm ci --no-fund --no-audit
 
-      - name: Linting
+      - name: Override React version
+        run: npm install react@${{ matrix.react-version }} react-dom@${{ matrix.react-version }} --no-save --legacy-peer-deps
+
+      - name: Lint
         run: npm run lint:check
 
-      - name: Formatting
+      - name: Format
         run: npm run format:check
 
-      - name: Unit tests
+      - name: Build
+        run: npm run build
+
+      - name: Test
         run: npm test
