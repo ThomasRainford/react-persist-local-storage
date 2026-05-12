@@ -1,6 +1,6 @@
 # react-persist-local-storage
 
-A React hook for persisting, syncing and managing state in local storage.
+A React hook for persisting, syncing and managing state in local storage with SSR support.
 
 Supports object and string types.
 
@@ -9,6 +9,7 @@ Supports object and string types.
 - Keeps React state in sync with local storage.
 - Keeps local storage in sync between windows.
 - Add, update and delete local storage items.
+- SSR support.
 - Type hinting when using objects!
 
 ## Example Usage:
@@ -121,4 +122,26 @@ npm run dev
 ```bash
 cd ./examples
 npm run dev
+```
+
+### Publishing to npm
+
+1. Bump the version in `package.json` following [semver](https://semver.org/).
+
+2. Build the package:
+
+```bash
+npm run build
+```
+
+3. Log in to npm (if not already):
+
+```bash
+npm login
+```
+
+4. Publish:
+
+```bash
+npm publish
 ```

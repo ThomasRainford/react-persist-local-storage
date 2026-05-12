@@ -13,6 +13,9 @@ type UseLocalStorageReturnValue<T> = [
   () => void
 ];
 
+/** Returns true if running in a browser environment (guards against SSR). */
+const isBrowser = typeof window !== "undefined";
+
 /**
  * A hook that persists state in local storage.
  * Returns the state value and setter as well as a function
@@ -24,6 +27,10 @@ type UseLocalStorageReturnValue<T> = [
  * delete function will remove the local storage item from local storage.
  *
  * There is an option to enable syncing local storage changes between windows.
+ *
+ * When rendered server-side (SSR), localStorage is unavailable. In that case
+ * the hook returns 'initialValue' and all write operations are no-ops until
+ * the component mounts in the browser.
  *
  * @param key Local storage key.
  * @param initialValue Initial value of local storage item.
@@ -40,80 +47,127 @@ const useLocalStorage = <T>(
    * is an object, then return a JSON string. Otherwise, return
    * 'value' as a string.
    *
-   * @param value - The value to parse to a string.
-   * @return A string value of 'value'.
+   * @param value - The value to serialize to a string.
+   * @return A string representation of 'value'.
    */
-  const parseValue = useCallback(<T>(value: T): string => {
+  const serialize = useCallback((value: LocalStorageValue<T>): string => {
     return typeof value === "object"
       ? JSON.stringify(value)
       : String(value);
   }, []);
 
+  /**
+   * Returns the typed value of a raw localStorage string. If the string is
+   * valid JSON it is parsed; otherwise the raw string is returned as-is.
+   *
+   * @param value - The raw string retrieved from localStorage.
+   * @return The deserialized value.
+   */
+  const deserialize = useCallback(
+    (value: string): LocalStorageValue<T> => {
+      return isValidJson(value)
+        ? (JSON.parse(value) as LocalStorageValue<T>)
+        : (value as LocalStorageValue<T>);
+    },
+    []
+  );
+
   // State to store the local storage value.
-  // Sets the inital value to the current local storage value.
-  // Otherwise, set the inital value to 'parsedInitialValue'.
+  // Sets the initial value to the current local storage value if one exists.
+  // Otherwise, persists and returns 'initialValue'.
+  // When running server-side (no localStorage), returns 'initialValue' directly.
+  // Previously called getItem twice when the key was absent; now uses a single call.
+  // Error fallback now returns the correctly-typed 'initialValue' rather than a
+  // serialized string.
   const [storedValue, setStoredValue] = useState<LocalStorageValue<T>>(
     () => {
-      const parsedInitialValue = parseValue(initialValue);
+      if (!isBrowser) return initialValue as LocalStorageValue<T>;
+
       try {
-        let item = localStorage.getItem(key);
-        if (!item) localStorage.setItem(key, parsedInitialValue);
-        item = localStorage.getItem(key);
-        const isJson = isValidJson(item || "");
-        return isJson ? JSON.parse(item || "") : item;
+        // Set initial value to current local storage value if exists.
+        const existing = localStorage.getItem(key);
+        if (existing !== null) {
+          return deserialize(existing);
+        }
+
+        // Persist given initial value.
+        const serialized = serialize(initialValue as LocalStorageValue<T>);
+        localStorage.setItem(key, serialized);
+        return initialValue as LocalStorageValue<T>;
       } catch (error) {
-        console.error(error);
-        return parsedInitialValue || "";
+        console.error(
+          `[useLocalStorage] Failed to initialize key "${key}":`,
+          error
+        );
+        return initialValue as LocalStorageValue<T>;
       }
     }
   );
 
   /**
-   * Sets the state value to 'value'.
+   * Sets the state value and persists 'value' to localStorage.
+   *
+   * Is a no-op when running server-side (no localStorage available).
    *
    * @param value The new local storage value.
-   * @param eventKey The key of the event that triggered the change.
    */
-  const setValue = (value: LocalStorageValue<T>, eventKey?: string) => {
-    try {
-      // Only set the state value when the key for the local storage value (key)
-      // is the same as the key from an event (eventKey). Or when there is no event key.
-      // If neither of these then we would set the state value for the incorrect storage value!
-      if (key === eventKey || eventKey === undefined)
+  const setValue = useCallback(
+    (value: LocalStorageValue<T>) => {
+      if (!isBrowser) return;
+      try {
         setStoredValue(value);
-      let newValue = parseValue(value);
-      localStorage.setItem(eventKey || key, newValue);
-    } catch (error) {
-      console.error(error);
-    }
-  };
+        localStorage.setItem(key, serialize(value));
+      } catch (error) {
+        console.error(
+          `[useLocalStorage] Failed to set key "${key}":`,
+          error
+        );
+      }
+    },
+    [key, serialize]
+  );
+
+  /**
+   * Updates state when a storage event originates from another tab or window.
+   * Only applies the update when 'eventKey' matches this hook's 'key'.
+   *
+   * @param value The new local storage value parsed from the storage event.
+   * @param eventKey The key reported by the StorageEvent.
+   */
+  const setValueFromEvent = useCallback(
+    (value: LocalStorageValue<T>, eventKey: string) => {
+      if (eventKey !== key) return;
+      setStoredValue(value);
+    },
+    [key]
+  );
 
   /**
    * Deletes the item from local storage.
    * Also, the state value is set to null.
+   *
+   * Is a no-op when running server-side (no localStorage available).
    */
   const deleteItem = useCallback(() => {
+    if (!isBrowser) return;
     localStorage.removeItem(key);
     setStoredValue(null as LocalStorageValue<T>);
-  }, []);
+  }, [key]);
 
   // Effect for managing storage sync.
   useEffect(() => {
-    if (!options?.sync) return;
+    if (!isBrowser || !options?.sync) return;
+
     const onStorageChange = (event: StorageEvent) => {
-      let newValue: LocalStorageValue<T>;
-      if (isValidJson(event.newValue as string)) {
-        newValue = JSON.parse(event.newValue as string);
-      } else {
-        newValue = event.newValue as LocalStorageValue<T>;
-      }
-      setValue(newValue, event.key as string);
+      if (event.key === null || event.newValue === null) return;
+      setValueFromEvent(deserialize(event.newValue), event.key);
     };
+
     window.addEventListener("storage", onStorageChange);
     return () => {
       window.removeEventListener("storage", onStorageChange);
     };
-  }, []);
+  }, [options?.sync, setValueFromEvent, deserialize]);
 
   return [storedValue, setValue, deleteItem];
 };

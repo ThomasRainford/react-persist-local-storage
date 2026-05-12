@@ -9,7 +9,6 @@
     "noEmit": false,
     "composite": true,
     "strict": true,
-    "downlevelIteration": true,
     "skipLibCheck": true,
     "jsx": "react-jsx",
     "allowSyntheticDefaultImports": true,
@@ -17,9 +16,6 @@
     "allowJs": true,
     "sourceMap": true,
     "outDir": "build",
-    "paths": {
-      "test": ["./tests/*.test.ts"]
-    }
   },
   "include": ["./src/*.ts", "index.ts"],
   "exclude": ["node_modules", "build", "examples"]
